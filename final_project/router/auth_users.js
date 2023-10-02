@@ -46,20 +46,29 @@ regd_users.post("/login", (req,res) => {
 
 // Add a book review
 regd_users.put("/auth/review/:isbn", (req, res) => {
-    const book = req.params.isbn;
-    if (books[book]){
+    const bookIsbn = req.params.isbn;
+    const currentUser = req.session.authorization['username']
+
+    if (books[bookIsbn]){
         const review = req.query.review;
         try {
-            books[book]['reviews'][req.session.authorization['username']] = review;
+            books[bookIsbn]['reviews'][currentUser] = review;
         } catch (error) {
-            books[book]['reviews'] = {...books[book]['reviews'], ...{[req.session.authorization['username']]: review}}
+            books[bookIsbn]['reviews'] = {...books[bookIsbn]['reviews'], ...{[currentUser]: review}}
         }
         return res.send('Success.')
     }
 });
 
 regd_users.delete("/auth/review/:isbn", (req, res) => {
-    ///
+    const bookIsbn = req.params.isbn
+    const currentUser = req.session.authorization['username']
+    if (books[bookIsbn]){
+        delete books[bookIsbn]["reviews"][currentUser]
+        return res.send('Review was successfully deleted.')
+    } else {
+        res.status(404).send('Book not found.')
+    }
 })
 
 module.exports.authenticated = regd_users;
