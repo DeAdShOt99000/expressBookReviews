@@ -56,7 +56,7 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
         } catch (error) {
             books[bookIsbn]['reviews'] = {...books[bookIsbn]['reviews'], ...{[currentUser]: review}}
         }
-        return res.send('Success.')
+        return res.send(`The review for the book with ISBN ${bookIsbn} was successfully added/updated!`)
     }
 });
 
@@ -65,7 +65,7 @@ regd_users.delete("/auth/review/:isbn", (req, res) => {
     const currentUser = req.session.authorization['username']
     if (books[bookIsbn]){
         delete books[bookIsbn]["reviews"][currentUser]
-        return res.send('Review was successfully deleted.')
+        return res.send(`Reviews for the ISBN ${bookIsbn} posted by the user ${currentUser} was successfully deleted.`)
     } else {
         res.status(404).send('Book not found.')
     }

@@ -41,7 +41,7 @@ public_users.get('/isbn/:isbn',function (req, res) {
         })
 
         booksPromise.then(data => {
-            return res.send(JSON.stringify(data[isbn]))
+            return res.send(JSON.stringify(data[isbn], null, 4))
         })
     } else {
         return res.status(404).send('Book not found.')
@@ -88,7 +88,7 @@ public_users.get('/title/:title',function (req, res) {
 public_users.get('/review/:isbn',function (req, res) {
     const book = req.params.isbn;
     if (books[book]) {
-        return res.send(JSON.stringify(books[book].reviews))
+        return res.send(JSON.stringify(books[book].reviews, null, 4))
     } else {
         return res.status(404).send('Book not found.')
     }
